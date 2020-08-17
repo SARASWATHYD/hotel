@@ -46,6 +46,12 @@ appengineStage.dependsOn test
 appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
 
+            stopPreviousVersion = false
+            promote = false
+
+//            project = gaeDeploy.projectId.staging
+            version =   "v1"
+
     }
 }
 
@@ -64,7 +70,7 @@ test {
     }
 }
 
-group   = "com.example.appenginej8"        // Generated output GroupId
+group   = "com.hotel"        // Generated output GroupId
 version = "1.0-SNAPSHOT"       // Version in generated output
 
 sourceCompatibility = 1.8     // App Engine Flexible uses Java 8
