@@ -19,7 +19,7 @@ repositories {
 apply plugin: 'java'                              // standard Java tasks
 apply plugin: 'war'                               // standard Web Archive plugin
 apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
-appengine.tools.cloudSdkHome="/Users/saif/Downloads/google-cloud-sdk/"
+appengine.tools.cloudSdkHome="/Users/saraswathy/Downloads/google-cloud-sdk"
 
 dependencies {
     compile 'com.google.appengine:appengine-api-1.0-sdk:+'  // Latest App Engine Api's
@@ -27,6 +27,7 @@ dependencies {
 
     compile 'jstl:jstl:1.2'
 
+    compile "com.googlecode.objectify:objectify:5.1.23"
 // Add your dependencies here.
 //  compile 'com.google.cloud:google-cloud:+'   // Latest Cloud API's http://googlecloudplatform.github.io/google-cloud-java
 
@@ -41,17 +42,31 @@ dependencies {
 
 // Always run unit tests
 appengineDeploy.dependsOn test
-appengineStage.dependsOn test
+//appengineStage.dependsOn test
 
 appengine {  // App Engine tasks configuration
+    tools{
+        cloudSdkHome=  "/Users/saraswathy/Downloads/google-cloud-sdk"
+    }
+
+    run {
+        port = 8080
+        jvmFlags = ["-Dappengine.fullscan.seconds=4"]
+    }
+
     deploy {   // deploy configuration
+        project ="hotel"
+        stopPreviousVersion = false
+        promote = false
+        version =  "v1"
 
-            stopPreviousVersion = false
-            promote = false
-
-//            project = gaeDeploy.projectId.staging
-            version =   "v1"
-
+    }
+    explodeWar {
+        with copySpec {
+            from "${projectDir}/../gaeConfigFiles"
+            include '*.xml'
+            into 'WEB-INF'
+        }
     }
 }
 
@@ -70,7 +85,7 @@ test {
     }
 }
 
-group   = "com.hotel"        // Generated output GroupId
+group   = "com.example.appenginej8"        // Generated output GroupId
 version = "1.0-SNAPSHOT"       // Version in generated output
 
 sourceCompatibility = 1.8     // App Engine Flexible uses Java 8
